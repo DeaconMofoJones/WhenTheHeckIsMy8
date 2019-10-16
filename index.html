@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WhenTheHeckIsMy8</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+		<div class="container">
+			<h5>Clock In</h5>
+			<input type="time" name="clockInTimeInput" id="clockInTimeInput" value="06:30">
+			<button id="eightHourBtn">Go!</button>
+		</div>
+		<div class="container">
+			<h5>Clock Out</h5>
+			<h6>Military Time:</h3>
+			<div class="result">Null</div>
+		</div>
+		<div class="container">
+			<h6>12-Hour Time:</h3>
+			<div class="result-nonMilitary">Null</div>
+		</div>
+	
+</body>
+<script type="text/javascript">
+	var hour;
+	var min;
+	var time;
+	var twelveHourTime;
+	var AMPM;
+	$("#eightHourBtn").click(function(){
+		time = ($("#clockInTimeInput").val());
+		//extract and save min
+		min = parseInt(time[3]+time[4]);
+		//extract and save hour
+		hour = parseInt(time[0]+time[1]);
+		//add half hour to min
+		min += 30;
+		//work out 60 minute overflow logic
+		if (min>=60){
+			min-=60;
+			hour+=1;
+		}
+		//add 8 hours to hour
+		hour += 8;
+		//work out 24 hour overflow logic
+		if (hour>=24){
+			hour -=24;
+		}
+		//fix one digit bug for min
+		if (min.toString().length==1){
+			min = ("0"+min);
+		}
+		//fix one digit bug for hour
+		if (hour.toString().length==1){
+			hour = ("0"+hour);
+		}
+		//display the resulting military time
+		$(".result").html(hour+":"+min);
+		//convert result to twelve hour time and display it
+		var tMin;
+		var tHour;
+		var isAM = true;
+		if (parseInt(hour)>=12) {
+			isAM = false;
+		}
+		if (parseInt(hour)>12) {
+			tHour = parseInt(hour) - 12;
+		} else if(parseInt(hour)==12||parseInt(hour)==0){
+			tHour = 12;
+		} else {
+			tHour = hour;
+		}
+		tMin = min;
+		//fix one digit bug for min
+		if (tMin.toString().length==1){
+			tMin = ("0"+tMin);
+		}
+		//fix one digit bug for hour
+		if (tHour.toString().length==1){
+			tHour = ("0"+tHour);
+		}
+		//Determine if AM or PM
+		if (isAM==true){
+			AMPM = " AM";
+		} else if(isAM==false) {
+			AMPM = " PM";
+		}
+		$(".result-nonMilitary").html(tHour+":"+tMin+AMPM);
+	});
+</script>
+</html>
